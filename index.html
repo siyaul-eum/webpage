@@ -2,312 +2,193 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>이음코드 - 소프트웨어 개발</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>회사 홈페이지</title>
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Nanum+Gothic&display=swap');
-
     * {
       box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html, body {
+      height: 100%;
+      overflow: hidden;
+      font-family: 'Segoe UI', sans-serif;
     }
 
     body {
-      margin: 0;
-      font-family: 'Nanum Gothic', sans-serif;
-      background: linear-gradient(135deg, #89CFF0, #A6D0E4);
-      color: #222;
-      line-height: 1.5;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: black;
     }
 
-    #main-container {
-      width: 100%;
-      min-height: 100vh;
-      overflow-x: hidden;
-      position: relative;
-    }
-
-    #main-image-area {
-      position: fixed;
+    .video-container {
+      position: absolute;
       top: 0;
       left: 0;
-      width: 100vw;
-      height: 100vh;
-      opacity: 0;
-      transition: opacity 1s ease;
-      z-index: 1;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      z-index: -1;
     }
 
-    #main-image-area.visible {
-      opacity: 1;
-    }
-
-    #main-image-area img {
+    video {
       width: 100%;
       height: 100%;
       object-fit: cover;
-      display: block;
     }
 
     header {
-  position: absolute;
-  top: 16px;
-  left: 16px;
-  font-size: 32px; /* PC에서는 고정 크기 */
-  font-weight: 700;
-  color: white;
-  text-shadow: 0 0 6px rgba(0,0,0,0.8);
-  cursor: pointer;
-  z-index: 30;
-}
-
-    nav {
       position: absolute;
       top: 16px;
-      right: 16px;
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
+      left: 16px;
+      font-size: 32px;
+      font-weight: 700;
+      color: white;
+      text-shadow: 0 0 6px rgba(0,0,0,0.8);
+      cursor: pointer;
       z-index: 30;
     }
 
-    nav button {
-      background: none;
-      border: none;
-      color: white;
-      padding: 8px 12px;
-      font-size: 1rem;
-      cursor: pointer;
-      transition: color 0.3s ease;
-    }
-
-    nav button:hover {
-      color: #aaddff;
-    }
-
-    nav button.active {
-      color: #77bbff;
-      font-weight: 800;
-    }
-
     .main-slogan {
-  position: absolute;
-  top: 30%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  margin: 0;
-  color: white;
-  font-size: 36px; /* PC에서는 고정 크기 */
-  font-weight: 700;
-  text-align: center;
-  white-space: normal;
-  text-shadow: 0 0 10px rgba(0,0,0,0.7);
-  opacity: 0;
-  animation-fill-mode: forwards;
-  z-index: 5;
-  padding: 0 20px;
-}
+      position: absolute;
+      top: 30%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      margin: 0;
+      color: white;
+      font-size: 36px;
+      font-weight: 700;
+      text-align: center;
+      white-space: normal;
+      text-shadow: 0 0 10px rgba(0,0,0,0.7);
+      opacity: 0;
+      animation-fill-mode: forwards;
+      z-index: 5;
+      max-width: 90%;
+      line-height: 1.4;
+    }
 
-    @keyframes sloganSlideFadeIn {
+    .tab-container {
+      position: absolute;
+      top: 0;
+      right: 0;
+      display: flex;
+      flex-direction: row;
+      z-index: 20;
+      padding: 16px;
+    }
+
+    .tab-button {
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+      border: none;
+      padding: 8px 16px;
+      margin-left: 8px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: background 0.3s;
+      border-radius: 6px;
+      text-shadow: 0 0 4px rgba(0, 0, 0, 0.6);
+    }
+
+    .tab-button:hover {
+      background: rgba(255, 255, 255, 0.4);
+    }
+
+    .tab-content {
+      position: absolute;
+      bottom: 0;
+      width: 100%;
+      max-height: 40%;
+      background: rgba(0, 0, 0, 0.75);
+      color: white;
+      padding: 20px;
+      overflow-y: auto;
+      display: none;
+      z-index: 10;
+    }
+
+    .tab-content.show {
+      display: block;
+    }
+
+    @keyframes fadein {
       0% {
         opacity: 0;
-        transform: translateX(-60%) translateY(-50%);
+        transform: translate(-50%, -50%) scale(1.1);
       }
       100% {
         opacity: 1;
-        transform: translateX(-50%) translateY(-50%);
+        transform: translate(-50%, -50%) scale(1);
       }
     }
 
-    #main-container.show-slogan .main-slogan {
-      animation: sloganSlideFadeIn 1.2s ease forwards;
-    }
-
-    #content {
-      position: absolute;
-      top: 80px;
-      left: 5%;
-      right: 5%;
-      bottom: 20px;
-      background-color: rgba(255,255,255,0.95);
-      border-radius: 8px;
-      box-shadow: 0 6px 12px rgba(0,0,0,0.1);
-      opacity: 0;
-      transition: opacity 0.6s ease;
-      display: none;
-      padding: 20px;
-      overflow-y: auto;
-      z-index: 20;
-    }
-
-    #content.show {
-      display: block;
-      opacity: 1;
-    }
-
-    .down-arrow-svg {
-      position: fixed;
-      bottom: 20px;
-      left: 50%;
-      transform: translateX(-50%);
-      cursor: pointer;
-      z-index: 100;
-      user-select: none;
-      opacity: 0.8;
-      filter: drop-shadow(0 0 6px rgba(0,0,0,0.7));
-      animation: bounceArrow 2s infinite;
-    }
-
-    @keyframes bounceArrow {
-      0%, 100% {
-        transform: translateX(-50%) translateY(0);
-        opacity: 0.8;
-      }
-      50% {
-        transform: translateX(-50%) translateY(15px);
-        opacity: 1;
-      }
+    .main-slogan.fade-in {
+      animation: fadein 1s ease-out forwards;
     }
 
     @media (max-width: 600px) {
       header {
-    font-size: 7vw;
-  }
-
-      nav {
-        flex-direction: column;
-        align-items: flex-end;
-        gap: 6px;
-      }
-
-      nav button {
-        font-size: 4.5vw;
-        padding: 6px 10px;
+        font-size: 6vw;
       }
 
       .main-slogan {
-        font-size: 5.5vw;
-        padding: 0 10px;
+        font-size: 5vw;
+        white-space: normal;
+        max-width: 90%;
       }
 
-      #content {
-        top: 90px;
-        font-size: 4.2vw;
-        padding: 16px;
+      .tab-container {
+        padding: 10px 8px;
       }
 
-      .down-arrow-svg {
-        display: none;
+      .tab-button {
+        font-size: 3.5vw;
+        padding: 6px 8px;
+        margin-left: 4px;
       }
     }
   </style>
 </head>
 <body>
-
-<div id="main-container">
-  <header id="header">이음코드</header>
-  <nav>
-    <button data-tab="about">회사소개</button>
-    <button data-tab="services">서비스</button>
-    <button data-tab="ui-demo">UI 데모</button>
-    <button data-tab="contact">문의</button>
-  </nav>
-
-  <div id="main-image-area">
-    <img src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?ixlib=rb-4.0.3&auto=format&fit=crop&w=1470&q=80" alt="카페에서 일하는 사람" />
-    <p class="main-slogan">이음으로 연결하고, 코드로 미래를 만듭니다.</p>
+  <div class="video-container">
+    <video autoplay muted loop playsinline>
+      <source src="your-video.mp4" type="video/mp4">
+      브라우저가 비디오를 지원하지 않습니다.
+    </video>
   </div>
 
-  <div class="down-arrow-svg" aria-hidden="true">
-    <svg width="40" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <path d="M6 9l6 6 6-6" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
-    </svg>
+  <header onclick="location.reload()">회사이름</header>
+
+  <h1 class="main-slogan">고객의 미래를 함께<br>설계합니다</h1>
+
+  <div class="tab-container">
+    <button class="tab-button" onclick="showTab('about')">회사소개</button>
+    <button class="tab-button" onclick="showTab('products')">제품</button>
+    <button class="tab-button" onclick="showTab('contact')">연락처</button>
   </div>
 
-  <div id="content"></div>
-</div>
+  <div id="about" class="tab-content">회사에 대한 소개 내용입니다.</div>
+  <div id="products" class="tab-content">제품에 대한 설명입니다.</div>
+  <div id="contact" class="tab-content">연락처 정보가 여기에 표시됩니다.</div>
 
-<script>
-  document.addEventListener('DOMContentLoaded', () => {
-    const content = document.getElementById('content');
-    const buttons = document.querySelectorAll('nav button');
-    const header = document.getElementById('header');
-    const mainImageArea = document.getElementById('main-image-area');
-    const mainContainer = document.getElementById('main-container');
-
-    const tabs = {
-      about: `
-        <h2>회사소개</h2>
-        <p>임베디드 시스템 펌웨어 및 UI 개발을 전문으로 하는 이음코드입니다.</p>
-        <p>고객과 함께 성장하는 기업을 목표로 합니다.</p>
-      `,
-      services: `
-        <h2>서비스</h2>
-        <ul>
-          <li>임베디드 펌웨어 개발</li>
-          <li>시험용 UI 개발</li>
-          <li>맞춤형 소프트웨어 솔루션 제공</li>
-        </ul>
-      `,
-      'ui-demo': `
-        <h2>UI 데모</h2>
-        <p>DAQ UI 데모: 온도, 습도 센서 값이 실시간으로 표시됩니다.</p>
-        <p>TCP/IP 프로토콜 분석 UI 데모: 패킷 로그를 실시간으로 분석합니다.</p>
-        <div id="demo-area" style="margin-top:20px; padding:15px; background:#e0f0ff; border-radius:6px; color:#336699;">
-          UI 데모 영역 test.
-        </div>
-      `,
-      contact: `
-        <h2>문의하기</h2>
-        <p>문의는 이메일 <a href="mailto:contact@eumcode.com">siyaul@eumcode.kr</a> 으로 보내주세요.</p>
-        <p>전화: 010-8986-6046</p>
-      `
-    };
-
-    function fadeContent(newHTML) {
-      content.style.opacity = '0';
-      setTimeout(() => {
-        content.innerHTML = newHTML;
-        content.style.display = 'block';
-        setTimeout(() => {
-          content.style.opacity = '1';
-        }, 20);
-      }, 350);
-    }
-
-    function showTab(tab) {
-      if (tabs[tab]) {
-        fadeContent(tabs[tab]);
-        buttons.forEach(btn => btn.classList.toggle('active', btn.getAttribute('data-tab') === tab));
-        mainImageArea.classList.remove('visible');
-        mainContainer.classList.remove('show-slogan');
+  <script>
+    function showTab(tabId) {
+      document.querySelectorAll('.tab-content').forEach(el => {
+        el.classList.remove('show');
+      });
+      const tab = document.getElementById(tabId);
+      if (tab) {
+        tab.classList.add('show');
       }
     }
 
-    function showMainImage() {
-      content.style.opacity = '0';
-      setTimeout(() => {
-        content.style.display = 'none';
-        mainImageArea.classList.add('visible');
-        mainContainer.classList.add('show-slogan');
-        buttons.forEach(btn => btn.classList.remove('active'));
-        content.innerHTML = '';
-      }, 350);
-    }
-
-    buttons.forEach(btn => {
-      btn.addEventListener('click', () => {
-        const tab = btn.getAttribute('data-tab');
-        showTab(tab);
-      });
+    window.addEventListener('load', () => {
+      document.querySelector('.main-slogan').classList.add('fade-in');
     });
-
-    header.addEventListener('click', () => {
-      showMainImage();
-    });
-
-    showMainImage();
-  });
-</script>
-
+  </script>
 </body>
 </html>
