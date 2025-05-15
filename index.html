@@ -1,172 +1,205 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>이음코드 - 소프트웨어 개발</title>
-<style>
-  @import url('https://fonts.googleapis.com/css2?family=Nanum+Gothic&display=swap');
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>이음코드 - 소프트웨어 개발</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Nanum+Gothic&display=swap');
 
-  body {
-    margin: 0;
-    font-family: 'Nanum Gothic', sans-serif;
-    background: linear-gradient(135deg, #89CFF0, #A6D0E4);
-    color: #222;
-  }
+    * {
+      box-sizing: border-box;
+    }
 
-  #main-container {
-    position: relative;
-    width: 100vw;
-    height: 80vh;
-    overflow: hidden;
-  }
+    body {
+      margin: 0;
+      font-family: 'Nanum Gothic', sans-serif;
+      background: linear-gradient(135deg, #89CFF0, #A6D0E4);
+      color: #222;
+      line-height: 1.5;
+    }
 
-  #main-image-area {
-    position: fixed; /* 화면 고정 */
-    top: 0;
-    left: 0;
-    width: 100vw;  /* 뷰포트 너비 */
-    height: 100vh; /* 뷰포트 높이 */
-    opacity: 0;
-    transition: opacity 1s ease;
-    z-index: 1;
-  }
+    #main-container {
+      width: 100%;
+      min-height: 100vh;
+      overflow-x: hidden;
+      position: relative;
+    }
 
-  #main-image-area.visible {
-    opacity: 1;
-  }
-
-  #main-image-area img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover; /* 비율 유지하며 꽉 채움 */
-    display: block;
-  }
-
-  header, nav {
-    position: absolute;
-    top: 10px;
-    color: white;
-    text-shadow: 0 0 6px rgba(0,0,0,0.8);
-    font-weight: 700;
-    user-select: none;
-    z-index: 30; /* 탭과 헤더가 가장 위에 */
-  }
-
-  header {
-    left: 30px;
-    font-size: 28px;
-    cursor: pointer;
-  }
-
-  nav {
-    right: 30px;
-    display: flex;
-    gap: 20px;
-  }
-
-  nav button {
-    background: none;
-    border: none;
-    color: white;
-    padding: 10px 16px;
-    font-size: 16px;
-    cursor: pointer;
-    transition: color 0.3s ease;
-  }
-
-  nav button:hover {
-    color: #aaddff;
-  }
-
-  nav button.active {
-    color: #77bbff;
-    font-weight: 800;
-  }
-
-  /* 슬로건 위치 조정 및 애니메이션 */
-  #main-container .main-slogan {
-    position: absolute;
-    top: 28%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    margin: 0;
-    color: white;
-    font-size: 32px;
-    font-weight: 700;
-    text-shadow: 0 0 10px rgba(0,0,0,0.7);
-    white-space: nowrap;
-    z-index: 5;
-
-    opacity: 0;
-    animation-fill-mode: forwards;
-  }
-
-  /* 슬로건 좌측 약간 바깥에서 중앙으로 자연스럽게 이동 + 페이드인 애니메이션 */
-  @keyframes sloganSlideFadeIn {
-    0% {
+    #main-image-area {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
       opacity: 0;
-      transform: translateX(-60%) translateY(-50%);
+      transition: opacity 1s ease;
+      z-index: 1;
     }
-    100% {
+
+    #main-image-area.visible {
       opacity: 1;
-      transform: translateX(-50%) translateY(-50%);
     }
-  }
 
-  #main-container.show-slogan .main-slogan {
-    animation: sloganSlideFadeIn 1.2s ease forwards;
-  }
+    #main-image-area img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
 
-  /* 컨텐츠 영역, 이미지 위에 겹치도록 */
-  #content {
-    position: absolute;
-    top: 60px; /* 헤더와 탭 아래쪽으로 내려서 겹치지 않도록 */
-    left: 20px;
-    right: 20px;
-    bottom: 20px;
-    background-color: rgba(255,255,255,0.95);
-    border-radius: 8px;
-    box-shadow: 0 6px 12px rgba(0,0,0,0.1);
-    color: #222;
-    opacity: 0;
-    transition: opacity 0.6s ease;
-    display: none;
-    padding: 30px 40px;
-    overflow-y: auto;
-    z-index: 20; /* 이미지 위, 탭 헤더 아래 */
-  }
-
-  #content.show {
-    display: block;
-    opacity: 1;
-  }
-
-  /* 하단 중앙 아래로 향하는 화살표 (머리 부분만) */
-.down-arrow-svg {
-  position: fixed;  /* fixed로 변경 */
-  bottom: 20px;
-  left: 50%;
-  transform: translateX(-50%);
+    header {
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  font-size: 32px; /* PC에서는 고정 크기 */
+  font-weight: 700;
+  color: white;
+  text-shadow: 0 0 6px rgba(0,0,0,0.8);
   cursor: pointer;
-  z-index: 100;
-  user-select: none;
-  opacity: 0.8;
-  filter: drop-shadow(0 0 6px rgba(0,0,0,0.7));
-  animation: bounceArrow 2s infinite;
+  z-index: 30;
 }
 
-  @keyframes bounceArrow {
-    0%, 100% {
-      transform: translateX(-50%) translateY(0);
-      opacity: 0.8;
+    nav {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      z-index: 30;
     }
-    50% {
-      transform: translateX(-50%) translateY(15px);
+
+    nav button {
+      background: none;
+      border: none;
+      color: white;
+      padding: 8px 12px;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: color 0.3s ease;
+    }
+
+    nav button:hover {
+      color: #aaddff;
+    }
+
+    nav button.active {
+      color: #77bbff;
+      font-weight: 800;
+    }
+
+    .main-slogan {
+  position: absolute;
+  top: 30%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  margin: 0;
+  color: white;
+  font-size: 36px; /* PC에서는 고정 크기 */
+  font-weight: 700;
+  text-align: center;
+  white-space: normal;
+  text-shadow: 0 0 10px rgba(0,0,0,0.7);
+  opacity: 0;
+  animation-fill-mode: forwards;
+  z-index: 5;
+  padding: 0 20px;
+}
+
+    @keyframes sloganSlideFadeIn {
+      0% {
+        opacity: 0;
+        transform: translateX(-60%) translateY(-50%);
+      }
+      100% {
+        opacity: 1;
+        transform: translateX(-50%) translateY(-50%);
+      }
+    }
+
+    #main-container.show-slogan .main-slogan {
+      animation: sloganSlideFadeIn 1.2s ease forwards;
+    }
+
+    #content {
+      position: absolute;
+      top: 80px;
+      left: 5%;
+      right: 5%;
+      bottom: 20px;
+      background-color: rgba(255,255,255,0.95);
+      border-radius: 8px;
+      box-shadow: 0 6px 12px rgba(0,0,0,0.1);
+      opacity: 0;
+      transition: opacity 0.6s ease;
+      display: none;
+      padding: 20px;
+      overflow-y: auto;
+      z-index: 20;
+    }
+
+    #content.show {
+      display: block;
       opacity: 1;
     }
+
+    .down-arrow-svg {
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      cursor: pointer;
+      z-index: 100;
+      user-select: none;
+      opacity: 0.8;
+      filter: drop-shadow(0 0 6px rgba(0,0,0,0.7));
+      animation: bounceArrow 2s infinite;
+    }
+
+    @keyframes bounceArrow {
+      0%, 100% {
+        transform: translateX(-50%) translateY(0);
+        opacity: 0.8;
+      }
+      50% {
+        transform: translateX(-50%) translateY(15px);
+        opacity: 1;
+      }
+    }
+
+    @media (max-width: 600px) {
+      header {
+    font-size: 7vw;
   }
-</style>
+
+      nav {
+        flex-direction: column;
+        align-items: flex-end;
+        gap: 6px;
+      }
+
+      nav button {
+        font-size: 4.5vw;
+        padding: 6px 10px;
+      }
+
+      .main-slogan {
+        font-size: 5.5vw;
+        padding: 0 10px;
+      }
+
+      #content {
+        top: 90px;
+        font-size: 4.2vw;
+        padding: 16px;
+      }
+
+      .down-arrow-svg {
+        display: none;
+      }
+    }
+  </style>
 </head>
 <body>
 
@@ -184,7 +217,6 @@
     <p class="main-slogan">이음으로 연결하고, 코드로 미래를 만듭니다.</p>
   </div>
 
-  <!-- 하단 중앙 아래로 향하는 화살표 SVG -->
   <div class="down-arrow-svg" aria-hidden="true">
     <svg width="40" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
       <path d="M6 9l6 6 6-6" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
@@ -236,7 +268,7 @@
       setTimeout(() => {
         content.innerHTML = newHTML;
         content.style.display = 'block';
-        setTimeout(() => { // 애니메이션 부드럽게
+        setTimeout(() => {
           content.style.opacity = '1';
         }, 20);
       }, 350);
@@ -273,17 +305,7 @@
       showMainImage();
     });
 
-    // 처음 로드시 메인 이미지 및 슬로건 애니메이션 적용
     showMainImage();
-
-    // 아래 화살표 클릭 시 페이지 아래로 스크롤 부드럽게 이동
-    const downArrow = document.querySelector('.down-arrow-svg');
-    downArrow.addEventListener('click', () => {
-      window.scrollTo({
-        top: window.innerHeight,
-        behavior: 'smooth'
-      });
-    });
   });
 </script>
 
