@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>이음코드 - 소프트웨어 개발</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Nanum+Gothic&display=swap');
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Nanum Gothic', sans-serif;
+      background: linear-gradient(135deg, #89CFF0, #A6D0E4);
+      color: #222;
+      line-height: 1.5;
+      height: 100vh;
+      overflow: hidden;
+      position: relative;
+    }
+
+    #main-container {
+      width: 100%;
+      height: 100vh;
+      overflow: hidden;
+      position: relative;
+    }
+
+    #main-image-area {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      opacity: 0;
+      transition: opacity 1s ease;
+      z-index: 1;
+    }
+
+    #main-image-area.visible {
+      opacity: 1;
+    }
+
+    #main-image-area img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    header {
+      position: absolute;
+      top: 16px;
+      left: 16px;
+      font-size: 32px;
+      font-weight: 700;
+      color: white;
+      text-shadow: 0 0 6px rgba(0,0,0,0.8);
+      cursor: pointer;
+      z-index: 30;
+
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .header-logo
+    {
+      width: 55px;
+      height: 55px;
+      object-fit: contain;
+    }
+
+    nav {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      z-index: 30;
+    }
+
+    nav button {
+      background: none;
+      border: none;
+      color: white;
+      padding: 8px 12px;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: color 0.3s ease;
+    }
+
+    nav button:hover {
+      color: #aaddff;
+    }
+
+    nav button.active {
+      color: #77bbff;
+      font-weight: 800;
+    }
+
+    .main-slogan {
+      position: absolute;
+      bottom: 380px;
+      left: 100px;
+      margin: 0;
+      color: #7ec8ff;
+      font-size: 50px;
+      font-weight: 700;
+      text-align: left;
+      white-space: normal;
+      text-shadow: 0 0 10px rgba(0,0,0,0.7);
+      opacity: 0;
+      animation-fill-mode: forwards;
+      z-index: 5;
+      max-width: 50vw;
+      padding-right: 20px;
+      line-height: 1.1;
+    }
+
+    .sub-slogan-container {
+      position: absolute;
+      bottom: 70px;
+      left: 100px;
+      display: flex;
+      flex-direction: column;
+      /*gap: 10px;  줄간격 좁게 */
+      max-width: 50vw;
+      z-index: 5;
+    }
+
+    .sub-slogan {
+      color: white;
+      font-size: 30px;
+      text-align: left;
+      opacity: 0;
+      animation-fill-mode: forwards;
+      text-shadow: 0 0 8px rgba(0,0,0,0.6);
+      line-height: 1.2;
+      user-select: none;
+      margin-bottom: 2px;
+    }
+
+    @keyframes subSloganFadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes sloganSlideFadeIn {
+      0% {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    #main-container.show-slogan .main-slogan {
+      animation: sloganSlideFadeIn 1.2s ease forwards;
+    }
+
+    #main-container.show-slogan .sub-slogan {
+      animation: subSloganFadeIn 1s ease forwards;
+    }
+
+    #content {
+      position: absolute;
+      top: 80px;
+      left: 5%;
+      right: 5%;
+      bottom: 20px;
+      background-color: rgba(255,255,255,0.95);
+      border-radius: 8px;
+      box-shadow: 0 6px 12px rgba(0,0,0,0.1);
+      opacity: 0;
+      transition: opacity 0.6s ease;
+      display: none;
+      padding: 20px;
+      overflow-y: auto;
+      z-index: 20;
+    }
+
+    #content.show {
+      display: block;
+      opacity: 1;
+    }
+
+    .down-arrow-svg {
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      cursor: pointer;
+      z-index: 100;
+      user-select: none;
+      opacity: 0.8;
+      filter: drop-shadow(0 0 6px rgba(0,0,0,0.7));
+      animation: bounceArrow 2s infinite;
+    }
+
+    @keyframes bounceArrow {
+      0%, 100% {
+        transform: translateX(-50%) translateY(0);
+        opacity: 0.8;
+      }
+      50% {
+        transform: translateX(-50%) translateY(15px);
+        opacity: 1;
+      }
+    }
+
+    @media (max-width: 600px) {
+      header {
+        font-size: 7vw;
+      }
+
+      nav {
+        flex-direction: column;
+        align-items: flex-end;
+        gap: 6px;
+      }
+
+      nav button {
+        font-size: 4.5vw;
+        padding: 6px 10px;
+      }
+
+      .main-slogan {
+        font-size: 5.5vw;
+        max-width: 80vw;
+        bottom: 120px;
+        left: 10px;
+        padding-right: 10px;
+      }
+
+      .sub-slogan-container {
+        max-width: 80vw;
+        left: 10px;
+        bottom: 10px;
+        gap: 3px;
+      }
+
+      .sub-slogan {
+        font-size: 4vw;
+        line-height: 1.1;
+      }
+
+      #content {
+        top: 90px;
+        font-size: 4.2vw;
+        padding: 16px;
+      }
+
+      .down-arrow-svg {
+        display: none;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<div id="main-container">
+  <header id="header" onclick="location.href='index.html'">
+    <img src="eumLogo.png" alt="로고" class="header-logo" />
+    이음코드
+  </header>
+  <nav>
+    <button class="active">회사소개</button>
+    <button>서비스</button>
+    <button>UI 데모</button>
+    <button onclick="location.href='contect.html'">문의</button>
+  </nav>
+
+  <div id="main-image-area">
+    <img src="https://images.unsplash.com/photo-1605214101860-84e51cf4c0db?q=80&w=3987&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D"/>
+    <p class="main-slogan">코드는 가볍게, 유저는 심플하게.</p>
+    <div class="sub-slogan-container">
+      <p class="sub-slogan">이음코드는 여러분의 아이디어를 현실로 만들어드립니다.</p>
+      <p class="sub-slogan">누가 봐도 이해하기 쉬운 코드!</p>
+      <p class="sub-slogan">어떤 사용자든 사용하기 편리하게!</p>
+      <p class="sub-slogan">쉽고 편한 시스템으로, 함께 성장하는 친구가 되겠습니다.</p>
+    </div>
+  </div>
+
+  <div class="down-arrow-svg" aria-hidden="true">
+    <svg width="40" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M6 9l6 6 6-6" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+  </div>
+
+  <div id="content"></div>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const content = document.getElementById('content');
+    const header = document.getElementById('header');
+    const mainImageArea = document.getElementById('main-image-area');
+    const mainContainer = document.getElementById('main-container');
+
+    function fadeContent(newHTML) {
+      content.style.opacity = '0';
+      setTimeout(() => {
+        content.innerHTML = newHTML;
+        content.style.display = 'block';
+        setTimeout(() => {
+          content.style.opacity = '1';
+        }, 20);
+      }, 350);
+    }
+
+    function showMainImage() {
+      content.style.opacity = '0';
+      setTimeout(() => {
+        content.style.display = 'none';
+        mainImageArea.classList.add('visible');
+        mainContainer.classList.add('show-slogan');
+
+        // 서브 슬로건들 순차적으로 애니메이션 지연시간 설정
+        document.querySelectorAll('.sub-slogan').forEach((el, i) => {
+          el.style.animationDelay = `${0.5 + i * 0.3}s`;
+        });
+
+        content.innerHTML = '';
+      }, 350);
+    }
+
+    header.addEventListener('click', () => {
+      showMainImage();
+    });
+
+    showMainImage();
+  });
+</script>
+
+</body>
+</html>
