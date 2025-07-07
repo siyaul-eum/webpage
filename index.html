@@ -56,10 +56,10 @@
 
     header
     {
-      position: absolute;
+      position: fixed;
       top: 16px;
       left: 16px;
-      font-size: 32px; /* PC에서는 고정 크기 */
+      font-size: 32px;
       font-weight: 700;
       color: white;
       text-shadow: 0 0 6px rgba(0,0,0,0.8);
@@ -70,14 +70,16 @@
       align-items: center;
       gap: 5px;
     }
+
     .header-logo
     {
+      position: static;
       width: 55px;
       height: 55px;
       object-fit: contain;
     }
 
-    nav
+    nav#main-nav
     {
       position: absolute;
       top: 16px;
@@ -110,6 +112,65 @@
       font-weight: 800;
     }
 
+    #bottom-tab-bar
+    {
+      display: none !important;
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      background-color: rgba(255,255,255,0.95);
+      box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+      z-index: 100;
+      justify-content: space-around;
+      padding: 8px 0;
+    }
+
+    #bottom-tab-bar button
+    {
+      background: none;
+      border: none;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+      color: #555;
+      font-size: 0.75rem;
+      cursor: pointer;
+      transition: color 0.3s ease;
+      padding: 6px 0;
+      flex: 1;
+    }
+
+    #bottom-tab-bar button svg
+    {
+      width: 24px;
+      height: 24px;
+      stroke: #555;
+      transition: stroke 0.3s ease;
+    }
+
+    #bottom-tab-bar button:hover svg
+    {
+      stroke: #007bff;
+    }
+
+    #bottom-tab-bar button:hover
+    {
+      color: #007bff;
+    }
+
+    #bottom-tab-bar button.active
+    {
+      color: #007bff;
+    }
+
+    #bottom-tab-bar button.active svg
+    {
+      stroke: #007bff;
+    }
+
     .main-slogan
     {
       position: absolute;
@@ -118,7 +179,7 @@
       transform: translate(-50%, -50%);
       margin: 0;
       color: white;
-      font-size: 36px; /* PC에서는 고정 크기 */
+      font-size: 36px;
       font-weight: 700;
       text-align: center;
       white-space: normal;
@@ -172,52 +233,16 @@
       opacity: 1;
     }
 
-    .down-arrow-svg
+    @media(max-width: 600px)
     {
-      position: fixed;
-      bottom: 20px;
-      left: 50%;
-      transform: translateX(-50%);
-      cursor: pointer;
-      z-index: 100;
-      user-select: none;
-      opacity: 0.8;
-      filter: drop-shadow(0 0 6px rgba(0,0,0,0.7));
-      animation: bounceArrow 2s infinite;
-    }
-
-    @keyframes bounceArrow
-    {
-      0%, 100%
+      #main-nav
       {
-        transform: translateX(-50%) translateY(0);
-        opacity: 0.8;
-      }
-      50%
-      {
-        transform: translateX(-50%) translateY(15px);
-        opacity: 1;
-      }
-    }
-
-    @media (max-width: 600px)
-    {
-      header
-      {
-        font-size: 7vw;
+        display: none !important;
       }
 
-      nav
+      #bottom-tab-bar
       {
-        flex-direction: column;
-        align-items: flex-end;
-        gap: 6px;
-      }
-
-      nav button
-      {
-        font-size: 4.5vw;
-        padding: 6px 10px;
+        display: flex !important;
       }
 
       .main-slogan
@@ -231,11 +256,7 @@
         top: 90px;
         font-size: 4.2vw;
         padding: 16px;
-      }
-
-      .down-arrow-svg
-      {
-        display: none;
+        bottom: 70px;
       }
     }
   </style>
@@ -243,53 +264,70 @@
 <body>
 
 <div id="main-container">
-  <header id="header">
+  <header id="header" onclick="location.href='index.html'">
     <img src="eumLogo.png" alt="로고" class="header-logo" />
     이음코드
   </header>
-  <nav>
+  <nav id="main-nav">
     <button onclick="location.href='about.html'">회사소개</button>
     <button onclick="location.href='service.html'">서비스</button>
-    <button>UI 데모</button>
     <button onclick="location.href='contect.html'">문의</button>
   </nav>
+
+  <div id="bottom-tab-bar">
+    <button onclick="location.href='index.html'" class="active">
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-home"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+      <span>메인</span>
+    </button>
+    <button onclick="location.href='about.html'">
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-info"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+      <span>회사소개</span>
+    </button>
+    <button onclick="location.href='service.html'">
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-briefcase"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path></svg>
+      <span>서비스</span>
+    </button>
+    <button onclick="location.href='contect.html'">
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-mail"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+      <span>문의</span>
+    </button>
+  </div>
 
   <div id="main-image-area">
     <img src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?ixlib=rb-4.0.3&auto=format&fit=crop&w=1470&q=80"/>
     <p class="main-slogan">이음으로 연결하고, 코드로 미래를 만듭니다.</p>
   </div>
-
-  <div class="down-arrow-svg" aria-hidden="true">
-    <svg width="40" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <path d="M6 9l6 6 6-6" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
-    </svg>
-  </div>
-
   <div id="content"></div>
 </div>
 
 <script>
-  document.addEventListener('DOMContentLoaded', () => {
+  document.addEventListener('DOMContentLoaded', () =>
+  {
     const content = document.getElementById('content');
     const header = document.getElementById('header');
     const mainImageArea = document.getElementById('main-image-area');
     const mainContainer = document.getElementById('main-container');
 
-    function fadeContent(newHTML) {
+    function fadeContent(newHTML)
+    {
       content.style.opacity = '0';
-      setTimeout(() => {
+      setTimeout(() =>
+      {
         content.innerHTML = newHTML;
         content.style.display = 'block';
-        setTimeout(() => {
+        setTimeout(() =>
+        {
           content.style.opacity = '1';
         }, 20);
       }, 350);
     }
 
 
-    function showMainImage() {
+    function showMainImage()
+    {
       content.style.opacity = '0';
-      setTimeout(() => {
+      setTimeout(() =>
+      {
         content.style.display = 'none';
         mainImageArea.classList.add('visible');
         mainContainer.classList.add('show-slogan');
@@ -297,7 +335,8 @@
       }, 350);
     }
 
-    header.addEventListener('click', () => {
+    header.addEventListener('click', () =>
+    {
       showMainImage();
     });
 
