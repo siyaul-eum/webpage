@@ -1,351 +1,585 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="ko" class="scroll-smooth">
 <head>
-  <meta name="google-site-verification" content="3EQvjGcmqw4UVBJYm3muZIJ--bpIaD7cpCbDAb5HMg0" />
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="me" href="https://kmong.com/gig/677311">
-  <meta name="description" content="이음코드 — 크몽에서 펌웨어 개발, 임베디드, 통신 솔루션 전문 서비스 제공">
-  <meta name="description" content="이음코드는 연결과 혁신을 만드는 회사입니다. 다양한 서비스를 제공합니다." />
-  <title>이음코드</title>
-  <style>
-    @import url('https://fonts.googleapis.com/css2?family=Nanum+Gothic&display=swap');
+    <meta name="google-site-verification" content="3EQvjGcmqw4UVBJYm3muZIJ--bpIaD7cpCbDAb5HMg0" />
+    <link rel="me" href="https://kmong.com/gig/677311">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EumCode</title>
+    <meta name="description" content="이음코드 — 크몽에서 펌웨어 개발, 임베디드, 통신 솔루션 전문 서비스 제공">
+    <meta name="description" content="이음코드는 연결과 혁신을 만드는 회사입니다. 다양한 서비스를 제공합니다." />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/png" href="eumLogo_Head.png">
+    <style>
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+            background-color: #F8F7F2;
+            color: #333D4B;
+        }
+        .hero-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            opacity: 0.2;
+        }
+        .section-fade-in {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+        }
+        .section-fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .nav-link {
+            position: relative;
+            padding-bottom: 2px;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: #4A5568;
+            transition: width .3s;
+        }
+        .nav-link.active::after {
+            width: 100%;
+        }
+        .service-card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .service-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
 
-    *
-    {
-      box-sizing: border-box;
-    }
-
-    body
-    {
-      margin: 0;
-      font-family: 'Nanum Gothic', sans-serif;
-      background: linear-gradient(135deg, #89CFF0, #A6D0E4);
-      color: #222;
-      line-height: 1.5;
-    }
-
-    #main-container
-    {
-      width: 100%;
-      min-height: 100vh;
-      overflow-x: hidden;
-      position: relative;
-    }
-
-    #main-image-area
-    {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      opacity: 0;
-      transition: opacity 1s ease;
-      z-index: 1;
-    }
-
-    #main-image-area.visible
-    {
-      opacity: 1;
-    }
-
-    #main-image-area img
-    {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      display: block;
-    }
-
-    header
-    {
-      position: fixed;
-      top: 16px;
-      left: 20px;
-      font-size: 32px;
-      font-weight: 700;
-      color: white;
-      text-shadow: 0 0 6px rgba(0,0,0,0.8);
-      cursor: pointer;
-      z-index: 30;
-
-      display: flex;
-      align-items: center;
-      gap: 5px;
-    }
-
-    .header-logo
-    {
-      position: static;
-      width: 150px;
-      height: 55px;
-      object-fit: contain;
-    }
-
-    nav#main-nav
-    {
-      position: absolute;
-      top: 16px;
-      right: 16px;
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      z-index: 30;
-    }
-
-    nav button
-    {
-      background: none;
-      border: none;
-      color: white;
-      padding: 8px 12px;
-      font-size: 1rem;
-      cursor: pointer;
-      transition: color 0.3s ease;
-    }
-
-    nav button:hover
-    {
-      color: #aaddff;
-    }
-
-    nav button.active
-    {
-      color: #77bbff;
-      font-weight: 800;
-    }
-
-    #bottom-tab-bar
-    {
-      display: none !important;
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      width: 100%;
-      background-color: rgba(255,255,255,0.95);
-      box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
-      z-index: 100;
-      justify-content: space-around;
-      padding: 8px 0;
-    }
-
-    #bottom-tab-bar button
-    {
-      background: none;
-      border: none;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 4px;
-      color: #555;
-      font-size: 0.75rem;
-      cursor: pointer;
-      transition: color 0.3s ease;
-      padding: 6px 0;
-      flex: 1;
-    }
-
-    #bottom-tab-bar button svg
-    {
-      width: 24px;
-      height: 24px;
-      stroke: #555;
-      transition: stroke 0.3s ease;
-    }
-
-    #bottom-tab-bar button:hover svg
-    {
-      stroke: #007bff;
-    }
-
-    #bottom-tab-bar button:hover
-    {
-      color: #007bff;
-    }
-
-    #bottom-tab-bar button.active
-    {
-      color: #007bff;
-    }
-
-    #bottom-tab-bar button.active svg
-    {
-      stroke: #007bff;
-    }
-
-    .main-slogan
-    {
-      position: absolute;
-      top: 30%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      margin: 0;
-      color: white;
-      font-size: 36px;
-      font-weight: 700;
-      text-align: center;
-      white-space: normal;
-      text-shadow: 0 0 10px rgba(0,0,0,0.7);
-      opacity: 0;
-      animation-fill-mode: forwards;
-      z-index: 5;
-      padding: 0 20px;
-    }
-
-    @keyframes sloganSlideFadeIn
-    {
-      0%
-      {
-        opacity: 0;
-        transform: translateX(-60%) translateY(-50%);
-      }
-      100%
-      {
-        opacity: 1;
-        transform: translateX(-50%) translateY(-50%);
-      }
-    }
-
-    #main-container.show-slogan .main-slogan
-    {
-      animation: sloganSlideFadeIn 1.2s ease forwards;
-    }
-
-    #content
-    {
-      position: absolute;
-      top: 80px;
-      left: 5%;
-      right: 5%;
-      bottom: 20px;
-      background-color: rgba(255,255,255,0.95);
-      border-radius: 8px;
-      box-shadow: 0 6px 12px rgba(0,0,0,0.1);
-      opacity: 0;
-      transition: opacity 0.6s ease;
-      display: none;
-      padding: 20px;
-      overflow-y: auto;
-      z-index: 20;
-    }
-
-    #content.show
-    {
-      display: block;
-      opacity: 1;
-    }
-
-    @media(max-width: 600px)
-    {
-      #main-nav
-      {
-        display: none !important;
-      }
-
-      #bottom-tab-bar
-      {
-        display: flex !important;
-      }
-
-      .main-slogan
-      {
-        font-size: 5.5vw;
-        padding: 0 10px;
-      }
-
-      #content
-      {
-        top: 90px;
-        font-size: 4.2vw;
-        padding: 16px;
-        bottom: 70px;
-      }
-    }
-  </style>
+        /* Project Card Styling */
+        .project-card {
+            background-color: white;
+            border-radius: 1rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            overflow: hidden;
+            cursor: pointer;
+            flex-grow: 1;
+        }
+        .project-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+        .project-card img {
+            width: 100%;
+            height: 250px; /* 고정된 이미지 높이 */
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+        .project-card:hover img {
+            transform: scale(1.05);
+        }
+    </style>
 </head>
-<body>
+<body class="bg-stone-50 text-gray-800">
 
-<div id="main-container">
-  <header id="header" onclick="location.href='index.html'">
-    <img src="eumLogo.png" alt="로고" class="header-logo" />
-  </header>
-  <nav id="main-nav">
-    <button onclick="location.href='about.html'">회사소개</button>
-    <button onclick="location.href='service.html'">서비스</button>
-    <button onclick="location.href='contect.html'">문의</button>
-  </nav>
+    <header id="header" class="bg-white/80 backdrop-blur-md fixed top-0 left-0 right-0 z-50 shadow-sm transition-all duration-300">
+        <div class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <a href="#hero" class="text-2xl font-bold text-gray-900 tracking-wider">
+                <img src="eumLogo.png" alt="EumCode 로고" class="h-8 md:h-10">
+                <span class="hidden md:block"></span>
+            </a>
+            <nav class="hidden md:flex space-x-8">
+                <a href="#about" class="nav-link text-gray-600 hover:text-gray-900 font-medium">회사 소개</a>
+                <a href="#services" class="nav-link text-gray-600 hover:text-gray-900 font-medium">서비스</a>
+                <a href="#projects" class="nav-link text-gray-600 hover:text-gray-900 font-medium">주요 프로젝트</a>
+                <a href="#process" class="nav-link text-gray-600 hover:text-gray-900 font-medium">개발 과정</a>
+                <a href="#contact" class="nav-link text-gray-600 hover:text-gray-900 font-medium">문의</a>
+            </nav>
+            <button id="mobile-menu-button" class="md:hidden focus:outline-none">
+                <span class="text-3xl">☰</span>
+            </button>
+        </div>
+        <div id="mobile-menu" class="hidden md:hidden px-6 pb-4">
+            <a href="#about" class="block py-2 text-center text-gray-600 hover:text-gray-900">회사 소개</a>
+            <a href="#services" class="block py-2 text-center text-gray-600 hover:text-gray-900">서비스</a>
+            <a href="#projects" class="block py-2 text-center text-gray-600 hover:text-gray-900">주요 프로젝트</a>
+            <a href="#process" class="block py-2 text-center text-gray-600 hover:text-gray-900">개발 과정</a>
+            <a href="#contact" class="block py-2 text-center text-gray-600 hover:text-gray-900">문의</a>
+        </div>
+    </header>
 
-  <div id="bottom-tab-bar">
-    <button onclick="location.href='index.html'" class="active">
-      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-home"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
-      <span>메인</span>
-    </button>
-    <button onclick="location.href='about.html'">
-      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-info"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
-      <span>회사소개</span>
-    </button>
-    <button onclick="location.href='service.html'">
-      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-briefcase"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path></svg>
-      <span>서비스</span>
-    </button>
-    <button onclick="location.href='contect.html'">
-      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-mail"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
-      <span>문의</span>
-    </button>
-  </div>
+    <main>
+        <section id="hero" class="relative min-h-screen flex items-center justify-center text-center overflow-hidden">
+            <canvas id="hero-canvas" class="hero-canvas"></canvas>
+            <div class="relative z-10 px-4">
+                <h1 class="text-5xl md:text-7xl font-extrabold text-gray-900 mb-4 leading-tight">EumCode</h1>
+                <p class="text-xl md:text-2xl text-gray-700 font-light">펌웨어 및 시제품 개발 전문 기업</p>
+                <a href="#services" class="mt-10 inline-block bg-gray-800 text-white font-bold py-3 px-8 rounded-full text-lg hover:bg-gray-700 transition-colors duration-300">
+                    서비스 보기
+                </a>
+            </div>
+        </section>
+        
+        <section id="about" class="py-20 md:py-32 bg-white section-fade-in">
+            <div class="container mx-auto px-6 text-center">
+                <h2 class="text-4xl font-bold mb-4">EumCode는 무엇인가요?</h2>
+                <p class="max-w-3xl mx-auto text-lg text-gray-600 mb-16">
+                    이음코드는 '기술을 연결하여 고객의 비전과 현실을 잇는 기업'이라는 뜻을 담고 있습니다. 펌웨어와 시제품 개발에 특화된 기술력을 바탕으로, 고객사의 아이디어를 가장 빠르고 정확하게 시장에 선보일 수 있도록 돕습니다.
+                </p>
+                <div class="flex justify-center my-10">
+                    <img src="Dev.png" class="rounded-xl shadow-lg w-full max-w-2xl">
+                </div>
+                <div class="grid md:grid-cols-3 gap-12 text-left">
+                    <div class="bg-stone-100 p-8 rounded-xl">
+                        <div class="text-4xl mb-4 text-indigo-500">💡</div>
+                        <h3 class="text-2xl font-bold mb-2">창의적 솔루션</h3>
+                        <p class="text-gray-600">고객사의 요구사항에 최적화된 맞춤형 펌웨어 솔루션을 제공하여, 제품의 경쟁력을 극대화합니다.</p>
+                    </div>
+                    <div class="bg-stone-100 p-8 rounded-xl">
+                        <div class="text-4xl mb-4 text-indigo-500">⚙️</div>
+                        <h3 class="text-2xl font-bold mb-2">신속한 개발</h3>
+                        <p class="text-gray-600">펌웨어와 하드웨어의 유기적인 통합을 통해 신속하고 효율적인 시제품 개발을 지원합니다.</p>
+                    </div>
+                    <div class="bg-stone-100 p-8 rounded-xl">
+                        <div class="text-4xl mb-4 text-indigo-500">🤝</div>
+                        <h3 class="text-2xl font-bold mb-2">고객 중심</h3>
+                        <p class="text-gray-600">단순한 개발을 넘어, 기획 단계부터 완성까지 고객과 긴밀하게 소통하며 함께 성장하는 파트너가 됩니다.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
 
-  <div id="main-image-area">
-    <img src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?ixlib=rb-4.0.3&auto=format&fit=crop&w=1470&q=80"/>
-    <p class="main-slogan">이음으로 연결하고, 코드로 미래를 만듭니다.</p>
-  </div>
-  <div id="content"></div>
-</div>
+        <section id="services" class="py-20 md:py-32 section-fade-in">
+            <div class="container mx-auto px-6">
+                <div class="text-center mb-16">
+                    <h2 class="text-4xl font-bold mb-4">주요 서비스</h2>
+                    <p class="max-w-2xl mx-auto text-lg text-gray-600">
+                        고객의 비즈니스 목표 달성을 위한 EumCode의 핵심 서비스를 확인해 보세요.
+                    </p>
+                </div>
+                <div class="grid md:grid-cols-3 gap-8">
+                    <div class="service-card bg-white rounded-xl shadow-lg overflow-hidden flex flex-col">
+                        <img src="meeting.png" alt="컨설팅 서비스 이미지" class="w-full h-48 object-cover">
+                        <div class="p-8 flex flex-col flex-grow">
+                            <span class="text-indigo-500 font-semibold mb-2">Service 1</span>
+                            <h3 class="text-3xl font-bold mb-4">펌웨어 컨설팅</h3>
+                            <p class="text-gray-600 mb-6 flex-grow">
+                                펌웨어 관련 기술적인 문제 해결부터 최적의 솔루션 제안까지, 전문적인 컨설팅을 제공합니다.
+                            </p>
+                            <ul class="text-gray-700 space-y-2">
+                                <li class="flex items-center"><span class="text-green-500 mr-2">✔</span> 기술 검토 및 타당성 분석</li>
+                                <li class="flex items-center"><span class="text-green-500 mr-2">✔</span> 아키텍처 설계 및 최적화</li>
+                                <li class="flex items-center"><span class="text-green-500 mr-2">✔</span> 개발 로드맵 수립</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="service-card bg-white rounded-xl shadow-lg overflow-hidden flex flex-col">
+                        <img src="mcu.png" alt="시제품 개발 서비스 이미지" class="w-full h-48 object-cover">
+                        <div class="p-8 flex flex-col flex-grow">
+                            <span class="text-indigo-500 font-semibold mb-2">Service 2</span>
+                            <h3 class="text-3xl font-bold mb-4">시제품 개발</h3>
+                            <p class="text-gray-600 mb-6 flex-grow">
+                                아이디어를 실제 제품으로 구현하는 과정입니다. 고객의 비전을 현실로 만들 수 있도록 펌웨어와 하드웨어를 통합하여 완성된 시제품을 개발합니다.
+                            </p>
+                            <ul class="text-gray-700 space-y-2">
+                                <li class="flex items-center"><span class="text-green-500 mr-2">✔</span> 임베디드 시스템 개발</li>
+                                <li class="flex items-center"><span class="text-green-500 mr-2">✔</span> 드라이버 및 미들웨어 개발</li>
+                                <li class="flex items-center"><span class="text-green-500 mr-2">✔</span> 센서 및 무선 통신 모듈 연동</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="service-card bg-white rounded-xl shadow-lg overflow-hidden flex flex-col">
+                        <img src="service.png" alt="기술 지원 서비스 이미지" class="w-full h-48 object-cover">
+                        <div class="p-8 flex flex-col flex-grow">
+                            <span class="text-indigo-500 font-semibold mb-2">Service 3</span>
+                            <h3 class="text-3xl font-bold mb-4">기술 지원 및 유지보수</h3>
+                            <p class="text-gray-600 mb-6 flex-grow">
+                                개발 완료 후에도 안정적인 제품 운영을 위해 지속적인 기술 지원과 유지보수 서비스를 제공합니다.
+                            </p>
+                            <ul class="text-gray-700 space-y-2">
+                                <li class="flex items-center"><span class="text-green-500 mr-2">✔</span> 버그 수정 및 최적화</li>
+                                <li class="flex items-center"><span class="text-green-500 mr-2">✔</span> 기능 업데이트 및 개선</li>
+                                <li class="flex items-center"><span class="text-green-500 mr-2">✔</span> 기술 관련 질의응답</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
 
-<script>
-  document.addEventListener('DOMContentLoaded', () =>
-  {
-    const content = document.getElementById('content');
-    const header = document.getElementById('header');
-    const mainImageArea = document.getElementById('main-image-area');
-    const mainContainer = document.getElementById('main-container');
+        <section id="projects" class="py-20 md:py-32 section-fade-in bg-white">
+            <div class="container mx-auto px-6">
+                <div class="text-center mb-16">
+                    <h2 class="text-4xl font-bold mb-4">주요 프로젝트</h2>
+                    <p class="max-w-2xl mx-auto text-lg text-gray-600">
+                        EumCode가 성공적으로 완료한 대표적인 프로젝트 사례들입니다.
+                    </p>
+                </div>
+                <div class="flex flex-col md:flex-row justify-center gap-8">
+                    <!-- Project 1 -->
+                    <div class="project-card">
+                        <img src="DAQ.png" alt="스마트 홈 기기 이미지">
+                        <div class="p-6">
+                            <h3 class="text-2xl font-bold mb-2">방사능 측정장비</h3>
+                            <div class="project-description text-sm text-gray-600">
+                                의료용 방사능 기기 개발을 위한. 방사능 장비 기능 검증용 DAQ 방사능 측정 장비 개발
+                                <br><br><b>기술 스택:</b> C#, Serial 통신, DAQ
+                                <br><b>핵심 기능:</b> 방사능 장비에서 나오는 방사능의 누적 방사량을 측정
+                                <br><b>성과:</b> 높은 정확성과, DAQ장비 활용성으로, 좋은 성과를 도출하였습니다.
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Project 2 -->
+                    <div class="project-card">
+                        <img src="SmartSensor.jpg" alt="의료 기기 시제품 이미지">
+                        <div class="p-6">
+                            <h3 class="text-2xl font-bold mb-2">Smart Sensor</h3>
+                            <div class="project-description text-sm text-gray-600">
+                                수중 과학 미션을 위한 압력 및 자세제어 를 위한 센서 보드 및 UI
+                                <br><br><b>기술 스택:</b> C#, C, Free RTOS, Petalinux
+                                <br><b>핵심 기능:</b> 수중에서 자세제어를 위한 알고리즘 분석용 시험 장비
+                                <br><b>성과:</b> 정확한 센서 데이터 도출과, 안정적인 시스템으로 성공적으로 실험을 마쳤습니다.
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Project 3 -->
+                    <div class="project-card">
+                        <img src="Nexus.png" alt="자율주행 드론 이미지">
+                        <div class="p-6">
+                            <h3 class="text-2xl font-bold mb-2">NEXUS</h3>
+                            <div class="project-description text-sm text-gray-600">
+                                로봇팔, 각종 센서 등. 센서 및 엑추에이터를 모두 하나의 시스템에서 제어하는 시스템 개발
+                                <br><br><b>기술 스택:</b> C#, C, Stm32, Free RTOS
+                                <br><b>핵심 기능:</b> 플러그인 방식 UI, 다양한 센서 지원 예정
+                                <br><b>성과:</b> 개발 중인 프로젝트로, 현재 로스팅 장비에 적용 예정
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
 
-    function fadeContent(newHTML)
-    {
-      content.style.opacity = '0';
-      setTimeout(() =>
-      {
-        content.innerHTML = newHTML;
-        content.style.display = 'block';
-        setTimeout(() =>
-        {
-          content.style.opacity = '1';
-        }, 20);
-      }, 350);
-    }
+        <section id="process" class="py-20 md:py-32 bg-stone-50 section-fade-in">
+            <div class="container mx-auto px-6">
+                <div class="text-center mb-16">
+                    <h2 class="text-4xl font-bold mb-4">개발 과정</h2>
+                    <p class="max-w-2xl mx-auto text-lg text-gray-600">EumCode는 다음과 같은 체계적인 프로세스로 프로젝트를 진행합니다.</p>
+                </div>
+                <div class="flex justify-center my-10">
+                    <img src="Develop.png" alt="개발 과정 이미지" class="rounded-xl shadow-lg w-full max-w-2xl">
+                </div>
+                <div class="relative">
+                    <div class="hidden md:block border-l-2 border-indigo-200 absolute h-full left-1/2 -translate-x-1/2"></div>
+                    <div class="space-y-12 md:space-y-0">
+                        <div class="md:flex items-center md:space-x-8">
+                            <div class="md:w-1/2">
+                                <div class="bg-white p-8 rounded-xl shadow-sm text-right">
+                                    <div class="text-indigo-500 font-bold mb-2">01. 상담 및 분석</div>
+                                    <p class="text-gray-600">고객의 요구사항과 목표를 정확히 파악하여 최적의 개발 계획을 수립합니다.</p>
+                                </div>
+                            </div>
+                            <div class="hidden md:flex w-1/2 justify-center">
+                               <div class="bg-indigo-500 w-6 h-6 rounded-full shadow-lg"></div>
+                            </div>
+                        </div>
+                        <div class="md:flex flex-row-reverse items-center md:space-x-8 md:space-x-reverse">
+                            <div class="md:w-1/2">
+                                <div class="bg-white p-8 rounded-xl shadow-sm">
+                                    <div class="text-indigo-500 font-bold mb-2">02. 설계 및 개발</div>
+                                    <p class="text-gray-600">분석을 바탕으로 펌웨어 아키텍처를 설계하고, 실제 개발에 착수합니다.</p>
+                                </div>
+                            </div>
+                            <div class="hidden md:flex w-1/2 justify-center">
+                               <div class="bg-indigo-500 w-6 h-6 rounded-full shadow-lg"></div>
+                            </div>
+                        </div>
+                        <div class="md:flex items-center md:space-x-8">
+                            <div class="md:w-1/2">
+                                <div class="bg-white p-8 rounded-xl shadow-sm text-right">
+                                    <div class="text-indigo-500 font-bold mb-2">03. 테스트 및 검증</div>
+                                    <p class="text-gray-600">시제품의 기능과 안정성을 철저히 테스트하여 완성도를 높입니다.</p>
+                                </div>
+                            </div>
+                            <div class="hidden md:flex w-1/2 justify-center">
+                               <div class="bg-indigo-500 w-6 h-6 rounded-full shadow-lg"></div>
+                            </div>
+                        </div>
+                         <div class="md:flex flex-row-reverse items-center md:space-x-8 md:space-x-reverse">
+                            <div class="md:w-1/2">
+                                <div class="bg-white p-8 rounded-xl shadow-sm">
+                                    <div class="text-indigo-500 font-bold mb-2">04. 최종 납품</div>
+                                    <p class="text-gray-600">고객이 만족할 수 있는 최종 결과물을 납품하고, 지속적인 기술 지원을 제공합니다.</p>
+                                </div>
+                            </div>
+                            <div class="hidden md:flex w-1/2 justify-center">
+                               <div class="bg-indigo-500 w-6 h-6 rounded-full shadow-lg"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
 
+        <section id="contact" class="py-20 md:py-32 bg-gray-800 text-white section-fade-in">
+            <div class="container mx-auto px-6 text-center">
+                <h2 class="text-4xl font-bold mb-4">프로젝트를 시작할 준비가 되셨나요?</h2>
+                <p class="max-w-2xl mx-auto text-lg text-gray-300 mb-10">
+                    지금 바로 이음코드와 함께 당신의 비전을 현실로 만들어보세요.
+                </p>
+                <div class="flex flex-col md:flex-row justify-center space-y-4 md:space-y-0 md:space-x-4">
+                    <a href="https://open.kakao.com/o/sPBFa1Tg" target="_blank" class="bg-yellow-400 text-gray-900 font-bold py-4 px-10 rounded-full text-xl hover:bg-yellow-300 transition-colors duration-300 inline-flex items-center justify-center space-x-2">
+                        <span>💬</span>
+                        <span>카카오톡 1:1 문의하기</span>
+                    </a>
+                    <a href="mailto:siyaul@eumcode.kr" class="bg-indigo-500 text-white font-bold py-4 px-10 rounded-full text-xl hover:bg-indigo-400 transition-colors duration-300 inline-flex items-center justify-center space-x-2">
+                        <span>📧</span>
+                        <span>이메일로 문의하기</span>
+                    </a>
+                    <a href="https://kmong.com/gig/677311" target="_blank" class="bg-green-500 text-white font-bold py-4 px-10 rounded-full text-xl hover:bg-green-400 transition-colors duration-300 inline-flex items-center justify-center space-x-2">
+                        <span>💰</span>
+                        <span>크몽으로 문의하기</span>
+                    </a>
+                </div>
+                <div class="flex justify-center mt-12">
+                    <img src="eumCode_BrandImage.png" alt="회사 위치 지도 이미지" class="rounded-xl shadow-lg w-full max-w-xl">
+                </div>
+            </div>
+        </section>
+    </main>
 
-    function showMainImage()
-    {
-      content.style.opacity = '0';
-      setTimeout(() =>
-      {
-        content.style.display = 'none';
-        mainImageArea.classList.add('visible');
-        mainContainer.classList.add('show-slogan');
-        content.innerHTML = '';
-      }, 350);
-    }
+    <footer class="bg-gray-900 text-gray-400 py-6">
+        <div class="container mx-auto px-6 text-center text-sm">
+            <p>&copy; 2025 EumCode. All Rights Reserved.</p>
+        </div>
+    </footer>
 
-    header.addEventListener('click', () =>
-    {
-      showMainImage();
-    });
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const mobileMenuButton = document.getElementById('mobile-menu-button');
+            const mobileMenu = document.getElementById('mobile-menu');
+            mobileMenuButton.addEventListener('click', () => {
+                mobileMenu.classList.toggle('hidden');
+            });
 
-    showMainImage();
-  });
-</script>
+            const navLinks = document.querySelectorAll('nav a, #mobile-menu a');
+            navLinks.forEach(link => {
+                link.addEventListener('click', () => {
+                     if(!mobileMenu.classList.contains('hidden')) {
+                         mobileMenu.classList.add('hidden');
+                     }
+                });
+            });
 
+            const header = document.getElementById('header');
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > 50) {
+                    header.classList.add('py-2');
+                    header.classList.remove('py-4');
+                } else {
+                    header.classList.add('py-4');
+                    header.classList.remove('py-2');
+                }
+            });
+            
+            // 전역 변수 설정
+            let isProcessAndContactVisible = false;
+            const navItems = document.querySelectorAll('header nav a');
+            const sections = document.querySelectorAll('section');
+            const processSection = document.getElementById('process');
+            const contactSection = document.getElementById('contact');
+
+            // 일반적인 스크롤 기반 밑줄 로직
+            function updateActiveNavLink(scrollY) {
+                let current = '';
+                sections.forEach(section => {
+                    const sectionTop = section.offsetTop;
+                    if (scrollY >= sectionTop - 60) {
+                        current = section.getAttribute('id');
+                    }
+                });
+
+                navItems.forEach(a => {
+                    a.classList.remove('active');
+                    if (a.getAttribute('href').substring(1) === current) {
+                        a.classList.add('active');
+                    }
+                });
+            }
+
+            // IntersectionObserver를 사용하여 '개발 과정'과 '문의'가 동시에 보이는지 감지
+            const observerOptions = {
+                root: null, // viewport를 기준으로 함
+                rootMargin: '0px',
+                threshold: 0 // 섹션이 조금이라도 보이면 true
+            };
+
+            const observer = new IntersectionObserver((entries) => {
+                let processVisible = false;
+                let contactVisible = false;
+
+                entries.forEach(entry => {
+                    if (entry.target.id === 'process' && entry.isIntersecting) {
+                        processVisible = true;
+                    }
+                    if (entry.target.id === 'contact' && entry.isIntersecting) {
+                        contactVisible = true;
+                    }
+                });
+                
+                // 두 섹션이 동시에 보이면 isProcessAndContactVisible 값을 true로 설정
+                if (processVisible && contactVisible) {
+                    isProcessAndContactVisible = true;
+                } else {
+                    isProcessAndContactVisible = false;
+                }
+                
+                // 두 섹션이 겹쳐 보이지 않을 때는 다시 스크롤 기반 밑줄로 전환
+                if (!isProcessAndContactVisible) {
+                    updateActiveNavLink(window.scrollY);
+                }
+            }, observerOptions);
+
+            // 관찰할 대상 설정
+            observer.observe(processSection);
+            observer.observe(contactSection);
+
+            // 마우스 위치에 따른 밑줄 로직
+            window.addEventListener('mousemove', (e) => {
+                // '개발 과정'과 '문의'가 동시에 보일 때만 마우스 위치 로직 활성화
+                if (isProcessAndContactVisible) {
+                    const processRect = processSection.getBoundingClientRect();
+                    const contactRect = contactSection.getBoundingClientRect();
+                    
+                    navItems.forEach(a => a.classList.remove('active'));
+
+                    // 마우스가 '개발 과정' 섹션 위에 있는지 확인
+                    if (e.clientY > processRect.top && e.clientY < processRect.bottom) {
+                        document.querySelector('a[href="#process"]').classList.add('active');
+                    }
+                    // 마우스가 '문의' 섹션 위에 있는지 확인
+                    else if (e.clientY > contactRect.top && e.clientY < contactRect.bottom) {
+                        document.querySelector('a[href="#contact"]').classList.add('active');
+                    }
+                }
+            });
+
+            // 스크롤 이벤트 리스너: 동시에 보이지 않을 때만 실행
+            window.addEventListener('scroll', () => {
+                if (!isProcessAndContactVisible) {
+                    updateActiveNavLink(window.scrollY);
+                }
+            });
+            
+            // 페이지 로드 시 초기 밑줄 설정
+            updateActiveNavLink(window.scrollY);
+            
+            const faders = document.querySelectorAll('.section-fade-in');
+            const appearOptions = {
+                threshold: 0.2,
+                rootMargin: "0px 0px -50px 0px"
+            };
+            const appearOnScroll = new IntersectionObserver(function(entries, appearOnScroll) {
+                entries.forEach(entry => {
+                    if (!entry.isIntersecting) {
+                        return;
+                    } else {
+                        entry.target.classList.add('visible');
+                        appearOnScroll.unobserve(entry.target);
+                    }
+                });
+            }, appearOptions);
+
+            faders.forEach(fader => {
+                appearOnScroll.observe(fader);
+            });
+
+            const canvas = document.getElementById('hero-canvas');
+            if(canvas) {
+                const ctx = canvas.getContext('2d');
+                let particles = [];
+                let width = canvas.width = window.innerWidth;
+                let height = canvas.height = window.innerHeight;
+
+                window.addEventListener('resize', () => {
+                    width = canvas.width = window.innerWidth;
+                    height = canvas.height = window.innerHeight;
+                });
+
+                class Particle {
+                    constructor(x, y) {
+                        this.x = x;
+                        this.y = y;
+                        this.size = Math.random() * 1.5 + 1;
+                        this.speedX = Math.random() * 2 - 1;
+                        this.speedY = Math.random() * 2 - 1;
+                        this.color = '#4A5568';
+                    }
+                    update() {
+                        this.x += this.speedX;
+                        this.y += this.speedY;
+
+                        if (this.size > 0.1) this.size -= 0.02;
+                    }
+                    draw() {
+                        ctx.fillStyle = this.color;
+                        ctx.beginPath();
+                        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                        ctx.fill();
+                    }
+                }
+
+                function initParticles() {
+                    for (let i = 0; i < 100; i++) {
+                        particles.push(new Particle(Math.random() * width, Math.random() * height));
+                    }
+                }
+
+                function handleParticles() {
+                    for (let i = 0; i < particles.length; i++) {
+                        particles[i].update();
+                        particles[i].draw();
+
+                        for (let j = i; j < particles.length; j++) {
+                            const dx = particles[i].x - particles[j].x;
+                            const dy = particles[i].y - particles[j].y;
+                            const distance = Math.sqrt(dx * dx + dy * dy);
+                            if (distance < 100) {
+                                ctx.beginPath();
+                                ctx.strokeStyle = particles[i].color;
+                                ctx.lineWidth = 0.2;
+                                ctx.moveTo(particles[i].x, particles[i].y);
+                                ctx.lineTo(particles[j].x, particles[j].y);
+                                ctx.stroke();
+                            }
+                        }
+
+                        if (particles[i].size <= 0.1) {
+                            particles.splice(i, 1);
+                            i--;
+                            particles.push(new Particle(Math.random() * width, Math.random() * height));
+                        }
+                    }
+                }
+
+                function animate() {
+                    ctx.clearRect(0, 0, width, height);
+                    handleParticles();
+                    requestAnimationFrame(animate);
+                }
+
+                initParticles();
+                animate();
+            }
+        });
+    </script>
 </body>
 </html>
